@@ -1,0 +1,16 @@
+{{#var className = string.pascalCase(entity.name)}}
+{{#var resourceFileName = string(className).snakeCase().ext('.ts').toString()}}
+{{{
+  exports({
+    to: app.makePath('app/socketio', feature.path, feature.name, entity.path, resourceFileName)
+  })
+}}}
+
+type Params = {}
+
+
+export default class {{ className }} {
+  static async handle({}: Params) {
+
+  }
+}
