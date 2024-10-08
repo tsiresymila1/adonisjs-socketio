@@ -36,6 +36,9 @@ export default class SocketIoProvider {
           if (typeof prototype[method] === 'function') {
             const eventInfo = getSocketIoEvent(prototype, method)
             if (eventInfo) {
+              logger.info(
+                `SocketIO handler [${serviceClass}.${method}] for event [${eventInfo.name}]`
+              )
               io?.[eventInfo.type](eventInfo.name, async (args: any[] | undefined) => {
                 await this.app.container.call(
                   await this.app.container.make(serviceClass),
@@ -57,16 +60,14 @@ export default class SocketIoProvider {
     const servicePath = this.app.servicesPath()
     await this.#registerListener(service.io!, servicePath)
 
-    // put io inside
-    this.app.container.singleton('io', () => {
-      return service.io!
-    })
-
     // put io in context
-    HttpContext.getter('io', () => {
-      return service.io!
-    })
-
+    HttpContext.getter(
+      'io',
+      () => {
+        return service.io!
+      },
+      true
+    )
     logger.info('Socket.IO server running ...')
   }
 
