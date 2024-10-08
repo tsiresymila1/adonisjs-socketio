@@ -6,6 +6,7 @@
     "node": ">=20.6.0"
   },
   "type": "module",
+  "main": "build/index.js",
   "files": [
     "build/src",
     "build/providers",
@@ -17,7 +18,8 @@
   ],
   "exports": {
     ".": "./build/index.js",
-    "./types": "./build/src/types.js"
+    "./types": "./build/src/types.js",
+    "./socketio_provider": "./build/providers/socketio_provider.js"
   },
   "scripts": {
     "clean": "del-cli build",
