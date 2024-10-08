@@ -32,7 +32,6 @@ export function OnDisconnect() {
   return HandleMessage({ name: 'disconnect', type: 'on' })
 }
 
-
 export function OnAnyMessage() {
   return HandleMessage({ name: '*', type: 'onAny' })
 }

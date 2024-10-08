@@ -71,7 +71,7 @@ export default class SocketIoProvider {
             [socket, data]
           )
         }
-        if (listener.type == 'onAny') {
+        if (listener.type === 'onAny') {
           socket[listener.type](handler)
         } else {
           socket[listener.type](listener.eventName, handler)
