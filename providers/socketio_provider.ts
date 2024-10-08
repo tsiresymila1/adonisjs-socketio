@@ -66,10 +66,7 @@ export default class SocketIoProvider {
       for (const listener of this.#listeners) {
         const handler = async (data: any) => {
           const instance = await this.app.container.make(listener.service)
-          await this.app.container.call(instance,
-            listener.method,
-            [socket, data]
-          )
+          await this.app.container.call(instance, listener.method, [socket, data])
         }
         if (listener.type === 'onAny') {
           socket[listener.type](handler)
