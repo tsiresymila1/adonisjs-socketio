@@ -5,7 +5,7 @@
 [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url]
 
 ## Introduction
-**Adonisjs-Socketio** provides JavaScript API to implementation **socketio** in **AdonisJS** applications.
+**Adonisjs-SocketIO** provides JavaScript API to implementation **socketio** in **AdonisJS** applications.
 
 ## Documentation
 
@@ -13,28 +13,28 @@ Create a service to handle event from socketio
 ```ts
 import { OnMessage, OnceMessage} from '@softmila/adonisjs-socketio'
 
-@inject()
-export default class SocketIoServcieHandler {
-
-  construct(protected ctx: HttpContext ){}
+export default class SocketIoServiceHandler {
 
   @OnMessage('on_message')
-  async onMessageHandler(data: any){
-    console.log('Data:', data)
-    this.ctx.io.emit('on_response', {data "ok"})
+  async onMessageHandler(socket: Socket, data: any){
+    console.log('Data:::', data)
+    const io = await app.container.make('io')
+    socket.emit('on_response', {data "ok"})
   }
 
   @OnceMessage('once_message')
-  async onceMessageHandler(data: any){
+  async onceMessageHandler(socket: Socket, data: any){
     console.log('Data:', data)
   }
 }
 ```
 
-**io** is avalaible in **HTTPContext**.
+**io** is avalaible in **HttpContext** and **ContainerBindings** .
+
+Note: Services that handle socketio event can't inject dependency that depends **HttpContext**.
 
 ## License
-**Adonisjs-Socketio** is open-sourced software licensed under the [MIT license](LICENSE.md).
+**Adonisjs-SocketIO** is open-sourced software licensed under the [MIT license](LICENSE.md).
 
 
 [npm-image]: https://img.shields.io/npm/v/@softmila/adonisjs-socketio/latest.svg?style=for-the-badge&logo=npm
