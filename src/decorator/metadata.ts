@@ -1,3 +1,3 @@
-export const enum Metadata  {
-    DECORATOR = "__SOCKETIO__LISTENER__"
+export const enum Metadata {
+  DECORATOR = '__SOCKETIO__LISTENER__',
 }

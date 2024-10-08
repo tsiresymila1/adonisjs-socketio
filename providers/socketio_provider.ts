@@ -25,7 +25,7 @@ export default class SocketIoProvider {
     service.boot()
     // Register all listeners inside service
     const servicePath = this.app.servicesPath()
-    await this.#registerListener(service.io!,servicePath)
+    await this.#registerListener(service.io!, servicePath)
 
     // put io inside
     this.app.container.singleton('io', () => {
@@ -43,7 +43,7 @@ export default class SocketIoProvider {
     for (const file of files) {
       const fullPath = join(directory, file.name)
       if (file.isDirectory()) {
-        await this.#registerListener(io,fullPath)
+        await this.#registerListener(io, fullPath)
       } else if (file.isFile() && (file.name.endsWith('.ts') || file.name.endsWith('.js'))) {
         const { default: serviceClass } = await import(pathToFileURL(fullPath).href)
         const prototype = serviceClass.prototype

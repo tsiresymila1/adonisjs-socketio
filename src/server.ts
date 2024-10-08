@@ -1,7 +1,7 @@
 import server from '@adonisjs/core/services/server'
 import { Server, ServerOptions } from 'socket.io'
 
-export default class SocketIO{
+export default class SocketIO {
   io: Server | undefined
   #booted: boolean = false
 
