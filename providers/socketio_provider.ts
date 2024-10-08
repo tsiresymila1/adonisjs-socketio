@@ -65,9 +65,9 @@ export default class SocketIoProvider {
       logger.info(`Client connected ...${socket.id}`)
       for (const listener of this.#listeners) {
         const handler = async (data: any) => {
-          await this.app.container.call(
-            await this.app.container.make(listener.service),
-            listener.service,
+          const instance = await this.app.container.make(listener.service)
+          await this.app.container.call(instance,
+            listener.method,
             [socket, data]
           )
         }
