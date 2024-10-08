@@ -1,7 +1,7 @@
 {
-  "name": "@softila/adonisjs-socketio",
+  "name": "@softmila/adonisjs-socketio",
   "description": "Socket.io package for AdonisJS",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "engines": {
     "node": ">=20.6.0"
   },
@@ -62,7 +62,8 @@
   },
   "publishConfig": {
     "access": "public",
-    "tag": "latest"
+    "tag": "latest",
+    "registry": "https://registry.npmjs.org"
   },
   "np": {
     "message": "chore(release): %s",
