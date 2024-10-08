@@ -84,7 +84,6 @@ export default class SocketIoProvider {
     const servicePath = this.app.servicesPath()
     await this.#registerListener(servicePath)
     await this.#registerHandler(service.io!)
-
     // put io in context
     HttpContext.getter(
       'io',
@@ -93,6 +92,10 @@ export default class SocketIoProvider {
       },
       true
     )
+
+    this.app.container.singleton('io', () => {
+      return service.io!
+    })
     logger.info('Socket.IO server running ...')
   }
 

@@ -25,3 +25,9 @@ declare module '@adonisjs/core/http' {
     io: Server
   }
 }
+
+declare module '@adonisjs/core/types' {
+  export interface ContainerBindings {
+    io: Server
+  }
+}
