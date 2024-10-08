@@ -27,6 +27,6 @@ export async function configure(_command: ConfigureCommand) {
    * Register provider
    */
   await codemods.updateRcFile((rcFile) => {
-    rcFile.addProvider('@softila/adonisjs-socketio/socketio_provider')
+    rcFile.addProvider('@softmila/adonisjs-socketio/socketio_provider')
   })
 }

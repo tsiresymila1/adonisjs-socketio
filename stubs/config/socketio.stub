@@ -3,7 +3,7 @@
     to: app.configPath('socketio.ts')
   })
 }}}
-import { defineConfig } from '@softmila/adonijs-socketio'
+import { defineConfig } from '@softmila/adonisjs-socketio'
 
 const socketIoConfig = defineConfig({
   cors:{

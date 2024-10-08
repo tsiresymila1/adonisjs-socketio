@@ -20,23 +20,7 @@ export default class SocketIoProvider {
     })
   }
 
-  async boot() {
-    const service = await this.app.container.make(SocketIO)
-    service.boot()
-    // Register all listeners inside service
-    const servicePath = this.app.servicesPath()
-    await this.#registerListener(service.io!, servicePath)
-
-    // put io inside
-    this.app.container.singleton('io', () => {
-      return service.io!
-    })
-
-    // put io in context
-    HttpContext.getter('io', () => {
-      return service.io!
-    })
-  }
+  async boot() {}
 
   async #registerListener(io: Server, directory: string) {
     const files = await readdir(directory, { withFileTypes: true })
@@ -67,6 +51,22 @@ export default class SocketIoProvider {
   }
 
   async ready() {
+    const service = await this.app.container.make(SocketIO)
+    service.boot()
+    // Register all listeners inside service
+    const servicePath = this.app.servicesPath()
+    await this.#registerListener(service.io!, servicePath)
+
+    // put io inside
+    this.app.container.singleton('io', () => {
+      return service.io!
+    })
+
+    // put io in context
+    HttpContext.getter('io', () => {
+      return service.io!
+    })
+
     logger.info('Socket.IO server running ...')
   }
 
