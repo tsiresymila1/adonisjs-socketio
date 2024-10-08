@@ -2,7 +2,7 @@ import { ApplicationService } from '@adonisjs/core/types'
 import logger from '@adonisjs/core/services/logger'
 
 import SocketIO from '../src/server.js'
-import { Server, ServerOptions } from 'socket.io'
+import { Server, ServerOptions, Socket } from 'socket.io'
 
 import { join } from 'node:path'
 import { readdir } from 'node:fs/promises'
@@ -10,8 +10,16 @@ import { pathToFileURL } from 'node:url'
 import { getSocketIoEvent } from '../src/decorator/handle_message.js'
 import { HttpContext } from '@adonisjs/core/http'
 
+type HandlerItem = {
+  eventName: string
+  type: 'on' | 'once' | 'onAny'
+  service: any
+  method: string
+}
 export default class SocketIoProvider {
   constructor(protected app: ApplicationService) {}
+
+  #listeners: Array<HandlerItem> = []
 
   register() {
     this.app.container.singleton(SocketIO, () => {
@@ -22,35 +30,54 @@ export default class SocketIoProvider {
 
   async boot() {}
 
-  async #registerListener(io: Server, directory: string) {
+  async #registerListener(directory: string) {
     const files = await readdir(directory, { withFileTypes: true })
     for (const file of files) {
       const fullPath = join(directory, file.name)
       if (file.isDirectory()) {
-        await this.#registerListener(io, fullPath)
+        await this.#registerListener(fullPath)
       } else if (file.isFile() && (file.name.endsWith('.ts') || file.name.endsWith('.js'))) {
         const { default: serviceClass } = await import(pathToFileURL(fullPath).href)
         const prototype = serviceClass.prototype
         const methods = Object.getOwnPropertyNames(prototype)
-        methods.forEach((method) => {
+        for (const method of methods) {
           if (typeof prototype[method] === 'function') {
             const eventInfo = getSocketIoEvent(prototype, method)
             if (eventInfo) {
               logger.info(
-                `SocketIO handler [${serviceClass}.${method}] for event [${eventInfo.name}]`
+                `SocketIO handler [${serviceClass.name}.${method}] for event [${eventInfo.name}]`
               )
-              io?.[eventInfo.type](eventInfo.name, async (args: any[] | undefined) => {
-                await this.app.container.call(
-                  await this.app.container.make(serviceClass),
-                  method,
-                  args
-                )
+              this.#listeners.push({
+                eventName: eventInfo.name,
+                type: eventInfo.type,
+                service: serviceClass,
+                method,
               })
             }
           }
-        })
+        }
       }
     }
+  }
+
+  async #registerHandler(io: Server) {
+    io.on('connection', (socket: Socket) => {
+      logger.info(`Client connected ...${socket.id}`)
+      for (const listener of this.#listeners) {
+        const handler = async (data: any) => {
+          await this.app.container.call(
+            await this.app.container.make(listener.service),
+            listener.service,
+            [socket, data]
+          )
+        }
+        if (listener.type == 'onAny') {
+          socket[listener.type](handler)
+        } else {
+          socket[listener.type](listener.eventName, handler)
+        }
+      }
+    })
   }
 
   async ready() {
@@ -58,7 +85,8 @@ export default class SocketIoProvider {
     service.boot()
     // Register all listeners inside service
     const servicePath = this.app.servicesPath()
-    await this.#registerListener(service.io!, servicePath)
+    await this.#registerListener(servicePath)
+    await this.#registerHandler(service.io!)
 
     // put io in context
     HttpContext.getter(

@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { Metadata } from './metadata.js'
 export type EventInfo = {
   name: string
-  type: 'on' | 'once'
+  type: 'on' | 'once' | 'onAny'
 }
 
 function HandleMessage(info: EventInfo) {
@@ -23,6 +23,20 @@ export function OnMessage(eventName: string) {
 export function OnceMessage(eventName: string) {
   return HandleMessage({ name: eventName, type: 'once' })
 }
+
+export function OnConnect() {
+  return HandleMessage({ name: 'connection', type: 'on' })
+}
+
+export function OnDisconnect() {
+  return HandleMessage({ name: 'disconnect', type: 'on' })
+}
+
+
+export function OnAnyMessage() {
+  return HandleMessage({ name: '*', type: 'onAny' })
+}
+
 export const getSocketIoEvent = (target: any, methodName: string): EventInfo | undefined => {
   return Reflect.getMetadata(Metadata.DECORATOR, target, methodName)
 }
