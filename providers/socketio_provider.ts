@@ -44,9 +44,9 @@ export default class SocketIoProvider {
           if (typeof prototype[method] === 'function') {
             const eventInfo = getSocketIoEvent(prototype, method)
             if (eventInfo) {
-              logger.info(
-                `SocketIO handler [${serviceClass.name}.${method}] for event [${eventInfo.name}]`
-              )
+              // logger.info(
+              //   `SocketIO handler [${serviceClass.name}.${method}] for event [${eventInfo.name}]`
+              // )
               this.#listeners.push({
                 eventName: eventInfo.name,
                 type: eventInfo.type,
@@ -62,7 +62,7 @@ export default class SocketIoProvider {
 
   async #registerHandler(io: Server) {
     io.on('connection', (socket: Socket) => {
-      logger.info(`Client connected ...${socket.id}`)
+      // logger.info(`Client connected ...${socket.id}`)
       for (const listener of this.#listeners) {
         const handler = async (data: any) => {
           const instance = await this.app.container.make(listener.service)

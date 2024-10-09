@@ -5,8 +5,8 @@
   "engines": {
     "node": ">=20.6.0"
   },
-  "type": "module",
   "main": "build/index.js",
+  "type": "module",
   "files": [
     "build/src",
     "build/providers",
@@ -37,9 +37,6 @@
     "version": "npm run build",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
-  "author": "Tsiresy Milà <tsiresymila@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
     "@adonisjs/assembler": "^7.7.0",
     "@adonisjs/core": "^6.12.0",
@@ -59,9 +56,24 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2",
+    "socket.io": "^4.8.0"
+  },
   "peerDependencies": {
     "@adonisjs/core": "^6.2.0"
   },
+  "author": "Tsiresy Milà <tsiresymila@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "adonisjs",
+    "socket.io",
+    "realtime"
+  ],
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/package"
+  },
+  "prettier": "@adonisjs/prettier-config",
   "publishConfig": {
     "access": "public",
     "tag": "latest",
@@ -81,13 +93,5 @@
     "exclude": [
       "tests/**"
     ]
-  },
-  "eslintConfig": {
-    "extends": "@adonisjs/eslint-config/package"
-  },
-  "prettier": "@adonisjs/prettier-config",
-  "dependencies": {
-    "reflect-metadata": "^0.2.2",
-    "socket.io": "^4.8.0"
   }
 }
