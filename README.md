@@ -24,7 +24,7 @@ import { OnMessage, OnceMessage, OnAnyMessage} from '@softmila/adonisjs-socketio
 
 export default class SocketIoServiceHandler {
 
-  @OnMessage('on_message')---
+  @OnMessage('on_message')
   async onMessageHandler(socket: Socket, data: any){
     console.log('Data:::', data)
     const io = await app.container.make('io')
