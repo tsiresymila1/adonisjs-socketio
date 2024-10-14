@@ -78,8 +78,7 @@ export default class SocketIoProvider {
         const { default: MiddlewareClass } = await import(pathToFileURL(fullPath).href)
         if (typeof MiddlewareClass === 'function') {
           const prototype = MiddlewareClass.prototype
-          SocketIoMiddleware.prototype
-          if (MiddlewareClass.prototype instanceof SocketIoMiddleware) {
+          if (prototype instanceof SocketIoMiddleware) {
             if ('handle' in prototype && typeof prototype.handle === 'function') {
               const instance: SocketIoMiddleware = await this.app.container.make(MiddlewareClass)
               io.use(instance['handle'])
