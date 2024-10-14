@@ -20,6 +20,8 @@ export {
   OnAnyMessage,
 } from './src/decorator/handle_message.js'
 
+export { SocketIoMiddleware } from './src/socketio_middleware.js'
+
 declare module '@adonisjs/core/http' {
   export interface HttpContext {
     io: Server

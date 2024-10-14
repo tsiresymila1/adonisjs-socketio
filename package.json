@@ -10,6 +10,7 @@
   "files": [
     "build/src",
     "build/providers",
+    "build/commands",
     "build/stubs",
     "build/index.d.ts",
     "build/index.js",
@@ -19,7 +20,8 @@
   "exports": {
     ".": "./build/index.js",
     "./types": "./build/src/types.js",
-    "./socketio_provider": "./build/providers/socketio_provider.js"
+    "./socketio_provider": "./build/providers/socketio_provider.js",
+    "./commands": "./build/commands/main.js"
   },
   "scripts": {
     "clean": "del-cli build",
@@ -32,10 +34,12 @@
     "test": "c8 npm run quick:test",
     "prebuild": "npm run lint && npm run clean",
     "build": "tsc",
-    "postbuild": "npm run copy:templates",
+    "postbuild": "npm run copy:templates && npm run index:commands",
     "release": "np",
     "version": "npm run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "index:commands": "adonis-kit index build/commands",
+    "watch": "chokidar '**/*.ts' -i 'build/**' -c 'npm run prebuild && npm run build && npm run postbuild'"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.7.0",
@@ -48,6 +52,7 @@
     "@swc/core": "^1.6.3",
     "@types/node": "^20.14.5",
     "c8": "^10.1.2",
+    "chokidar-cli": "^3.0.0",
     "copyfiles": "^2.4.1",
     "del-cli": "^5.1.0",
     "eslint": "^8.57.0",

@@ -1,0 +1,19 @@
+{{#var middlewareName = generators.middlewareName(entity.name)}}
+{{#var middlewareFileName = generators.middlewareFileName(entity.name)}}
+{{{
+  exports({
+    to: app.middlewarePath(entity.path, middlewareFileName)
+  })
+}}}
+import type { DefaultEventsMap, ExtendedError, Socket } from 'socket.io'
+import { SocketIoMiddleware } from '@softmila/adonisjs-socketio'
+
+export default class {{ middlewareName }} implements SocketIoMiddleware {
+  handle(
+    socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>,
+    next: (err?: ExtendedError) => void
+  ): Promise<void> | void {
+    // Your code here
+    next()
+  }
+}

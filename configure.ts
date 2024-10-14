@@ -27,6 +27,9 @@ export async function configure(_command: ConfigureCommand) {
    * Register provider
    */
   await codemods.updateRcFile((rcFile) => {
-    rcFile.addProvider('@softmila/adonisjs-socketio/socketio_provider')
+    rcFile
+      .addProvider('@softmila/adonisjs-socketio/socketio_provider')
+      .addCommand('@softmila/adonisjs-socketio/commands')
+      .setCommandAlias('iomiddleware', 'make:io:middleware')
   })
 }

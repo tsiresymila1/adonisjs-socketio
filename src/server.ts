@@ -1,17 +1,20 @@
 import server from '@adonisjs/core/services/server'
 import { Server, ServerOptions } from 'socket.io'
 
-export default class SocketIO {
+export class ServerSocket {
   io: Server | undefined
-  #booted: boolean = false
+  #started: boolean = false
+  config: Partial<ServerOptions> | undefined
 
-  constructor(protected config?: Partial<ServerOptions>) {}
+  constructor(config?: Partial<ServerOptions>) {
+    this.config = config
+  }
 
-  boot() {
-    if (this.#booted) {
+  run() {
+    if (this.#started) {
       return
     }
-    this.#booted = true
+    this.#started = true
     this.io = new Server(server.getNodeServer(), {
       cors: {
         origin: '*',
@@ -21,9 +24,8 @@ export default class SocketIO {
   }
 
   async shutdown() {
-    if (this.#booted) {
+    if (this.#started) {
       await this.io?.removeAllListeners()
-      await this.io?.close()
     }
   }
 }
